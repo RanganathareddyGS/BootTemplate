@@ -1,15 +1,23 @@
 package mainproject.ecommerce.controller;
 
+
+
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+
+
 import jakarta.servlet.http.HttpSession;
-import mainproject.ecommerce.dto.Seller;
 import mainproject.ecommerce.dto.Customer;
+import mainproject.ecommerce.dto.Seller;
 import mainproject.ecommerce.helper.AES;
+import mainproject.ecommerce.helper.MyEmailSender;
 import mainproject.ecommerce.repository.CustomerRepository;
 import mainproject.ecommerce.repository.SellerRepository;
 
@@ -18,6 +26,9 @@ public class MainController {
 
 	@Value("${admin.email}")
 	private String adminEmail;
+	
+	@Autowired
+	MyEmailSender emailSender;
 
 	@Value("${admin.password}")
 	private String adminPassword;
@@ -54,26 +65,46 @@ public class MainController {
 			} else {
 				if (seller == null) {
 					if (AES.decrypt(customer.getPassword(), "123").equals(password)) {
+						if(customer.isVerified()) {
 						session.setAttribute("customer", customer);
 						session.setAttribute("success", "Login Success");
 						return "redirect:/customer/home";
+						}
+						else {
+							customer.setOtp(new Random().nextInt(100000,1000000));
+							customerRepository.save(customer);
+							emailSender.sendOtp(customer);
+							session.setAttribute("success", "Otp Sent Success");
+							session.setAttribute("id", customer.getId());
+							return "redirect:/customer/otp";
+						}
 					} else {
-						session.setAttribute("failure", "Invalid Password");
+						session.setAttribute("failure", "Invalid Passowrd");
 						return "redirect:/login";
 					}
 				} else {
 					if (AES.decrypt(seller.getPassword(), "123").equals(password)) {
+						if(seller.isVerified()) {
 						session.setAttribute("seller", seller);
 						session.setAttribute("success", "Login Success");
 						return "redirect:/seller/home";
+						}else {
+							seller.setOtp(new Random().nextInt(100000,1000000));
+							sellerRepository.save(seller);
+							emailSender.sendOtp(seller);
+							session.setAttribute("success", "Otp Sent Success");
+							session.setAttribute("id", seller.getId());
+							return "redirect:/seller/otp";
+						}
 					} else {
-						session.setAttribute("failure", "Invalid Password");
+						session.setAttribute("failure", "Invalid Passowrd");
 						return "redirect:/login";
 					}
 				}
 			}
 		}
 	}
+	
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		session.removeAttribute("admin");
