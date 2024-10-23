@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Seller Registration</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+    }
+    h1 {
+        color: #333;
+        text-align: center;
+    }
+    form {
+        background-color: #fff;
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    input[type="text"],
+    input[type="number"],
+    textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    span {
+        color: red;
+        font-size: 14px;
+    }
+</style>
+</head>
+<body>
+<h1>Seller Registration</h1>
+
+	<form action="/seller/register" method="post" th:object="${seller}">
+		Name: <input type="text" name="name" th:value="*{name}"> <span th:errors="*{name}"></span> <br> <br>
+	     Mobile: <input type="number" name="mobile" th:value="*{mobile}"><span th:errors="*{mobile}"></span> <br> <br>
+	     Email: <input type="text" name="email" th:value="*{email}"><span th:errors="*{email}"></span> <br> <br>
+	     Password: <input type="text" name="password" th:value="*{password}"><span th:errors="*{password}"></span> <br> <br>
+	     Confirm Password: <input type="text" name="confirmpassword" th:value="*{confirmpassword}"><span th:errors="*{confirmpassword}"></span>  <br> <br>
+	      Address:<textarea rows="5" cols="30" name="address" th:value="*{address}"></textarea><span th:errors="*{address}"></span>
+		<br>
+		<button>Register</button>
+	</form>
+</body>
+</html>

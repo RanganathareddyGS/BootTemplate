@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Home - E-Commerce Store</title>
+	<link rel="stylesheet" href="home.css">
+</head>
+<body>
+	<header>
+		<nav>
+			<div class="logo">E-Commerce Store</div>
+			<ul>
+				<li><a href="/">Home</a></li>
+				<li><a href="/">Products</a></li>
+				<li><a href="/login">Login</a></li>
+				<li><a href="/customer/register">Register</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<main>
+		<h3 th:text="${session.failure}"></h3>
+		<h3 th:text="${session.success}"></h3>
+		<h3 th:text="${@sessionMessageRemover.removeMessage()}"></h3>
+
+		<h1>Welcome to our E-Commerce Store</h1>
+		<p>Find the best products at great prices!</p>
+	</main>
+
+	<footer>
+		<p>© 2023 E-Commerce Store. All rights reserved.</p>
+	</footer>
+</body>
+</html>
